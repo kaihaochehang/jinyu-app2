@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "server.js"
+    }
+  ],
+  "env": {
+    "PORT": "3000",
+    "NODE_ENV": "production",
+    "SUPABASE_URL": "https://qbwjiqhxpeimvdttdqbv.supabase.co",
+    "SUPABASE_ANON_KEY": "sb_publishable_KEaZauYMcQy0pXu_Pu61kQ_Bp943nAd",
+    "JWT_SECRET": "your_jwt_secret_key",
+    "JWT_EXPIRES_IN": "7d",
+    "DATABASE_URL": "postgresql://postgres.qbwjiqhxpeimvdttdqbv:YangYanKai8@aws-1-ap-southeast-2.pooler.supabase.com:6543/postgres"
+  }
+}
