@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <title>金渔惠购</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=20260315">
+    <style>
+        /* 基础样式 - 确保移动端能正确显示 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: #f5f7fa; 
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* 登录页面 - 喜庆红色系 */
+        .auth-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
+            display: flex;
+            flex-direction: column;
+        }
+        .auth-header {
+            text-align: center;
+            padding: 60px 20px 30px;
+            color: white;
+        }
+        .auth-header .logo-icon {
+            width: 90px; height: 90px;
+            background: linear-gradient(135deg, #ffb703 0%, #fb8500 100%);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(255, 183, 3, 0.3);
+        }
+        .auth-header .logo-icon i { 
+            font-size: 48px; 
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .auth-header h1 { 
+            font-size: 32px; 
+            margin-bottom: 12px;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .auth-header p { 
+            font-size: 16px; 
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .auth-box {
+            flex: 1;
+            background: white;
+            border-radius: 24px 24px 0 0;
+            padding: 30px 20px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+        .auth-box h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: #c1121f;
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .form-group { margin-bottom: 16px; }
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #f1faee;
+            border-radius: 12px;
+            font-size: 16px;
+            background: #fefae0;
+            -webkit-appearance: none;
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #e63946;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+        }
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+        }
+        .btn-secondary {
+            background: #f1faee;
+            color: #c1121f;
+            border: 1px solid #e63946;
+        }
+        .btn-secondary:hover {
+            background: #fefae0;
+        }
+        .form-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #718096;
+        }
+        .form-link a { 
+            color: #e63946; 
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .form-link a:hover {
+            color: #c1121f;
+            text-decoration: underline;
+        }
+        
+        /* 会员中心 */
+        .member-container { min-height: 100vh; background: #f5f7fa; }
+        .header {
+            background: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-title { font-size: 18px; font-weight: 600; }
+        .header-actions { display: flex; gap: 12px; }
+        .btn-icon {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .asset-card {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+            margin: 16px;
+            border-radius: 16px;
+            padding: 24px;
+            color: white;
+            display: flex;
+            justify-content: space-around;
+        }
+        .asset-item { text-align: center; }
+        .asset-label { font-size: 14px; opacity: 0.9; margin-bottom: 8px; }
+        .asset-value { font-size: 28px; font-weight: 700; }
+        
+        .function-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 0 16px;
+            margin-bottom: 16px;
+        }
+        .function-btn {
+            background: white;
+            border: none;
+            border-radius: 12px;
+            padding: 20px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .function-btn i { font-size: 24px; color: #ff6b6b; }
+        .function-btn span { font-size: 13px; color: #2d3748; }
+        
+        .announcement-bar {
+            background: white;
+            margin: 0 16px 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .announcement-bar i { color: #ed8936; }
+        .announcement-content { font-size: 14px; color: #718096; }
+        
+        /* 弹窗 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 { font-size: 18px; }
+        .modal-close {
+            background: none; border: none;
+            font-size: 24px; color: #718096;
+            cursor: pointer;
+        }
+        .modal-body { padding: 20px; }
+        .modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 12px;
+        }
+        
+        /* 提示消息 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        
+        /* 表格 */
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th { background: #f8f9fa; font-weight: 600; }
+        
+        /* 隐藏元素 */
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <!-- 提示消息 -->
+    <div class="toast" id="toastMessage"></div>
+
+    <!-- 认证容器 -->
+    <div class="auth-container" id="authContainer">
+        <!-- 顶部装饰区域 -->
+        <div class="auth-header">
+            <div class="logo-icon">
+                <i class="fas fa-fish"></i>
+            </div>
+            <h1>金渔惠购</h1>
+            <p>让购物更有价值</p>
+        </div>
+        
+        <div class="auth-box">
+            <!-- 登录表单 -->
+            <div id="loginForm">
+                <h2>欢迎回来</h2>
+                <div class="form-group">
+                    <input type="text" class="form-input" id="loginUserId" placeholder="请输入手机号" maxlength="11">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" id="loginPassword" placeholder="请输入密码">
+                </div>
+                <button class="btn btn-primary" id="btnLogin">登 录</button>
+                <div class="form-link">
+                    <span>还没有账号？</span>
+                    <a href="#" id="toRegister">立即注册</a>
+                </div>
+            </div>
+            
+            <!-- 注册表单 -->
+            <div id="registerForm" style="display: none;">
+                <h2>创建账号</h2>
+                <div class="form-group">
+                    <input type="text" class="form-input" id="regUserId" placeholder="请输入手机号" maxlength="11">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" id="regPassword" placeholder="请设置登录密码">
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" id="regTradePassword" placeholder="请设置交易密码">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" id="regInviteCode" placeholder="邀请码（选填）">
+                </div>
+                <button class="btn btn-primary" id="btnRegister">注 册</button>
+                <div class="form-link">
+                    <span>已有账号？</span>
+                    <a href="#" id="toLogin">立即登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 会员中心 -->
+    <div class="member-container" id="memberContainer" style="display: none;">
+        <!-- 顶部导航 -->
+        <div class="header">
+            <div class="header-title">金渔惠购</div>
+            <div class="header-actions">
+                <button class="btn-icon" id="btnAnnouncement">
+                    <i class="fas fa-bullhorn"></i>
+                </button>
+                <button class="btn-icon" id="btnChangePassword">
+                    <i class="fas fa-key"></i>
+                </button>
+                <button class="btn-icon" id="btnLogout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 公告轮播 -->
+        <div class="announcement-bar">
+            <i class="fas fa-volume-up"></i>
+            <div class="announcement-scroll">
+                <div class="announcement-content" id="announcementContent">
+                    加载中...
+                </div>
+            </div>
+        </div>
+
+        <!-- 资产卡片 -->
+        <div class="asset-card">
+            <div class="asset-item">
+                <div class="asset-label">红包余额</div>
+                <div class="asset-value" id="yellowFishCount">0.00</div>
+            </div>
+            <div class="asset-item">
+                <div class="asset-label">积分余额</div>
+                <div class="asset-value" id="lockedBaitCount">0.00</div>
+            </div>
+        </div>
+
+        <!-- 功能按钮 -->
+        <div class="function-grid">
+            <button class="function-btn" id="btnTransfer">
+                <i class="fas fa-exchange-alt"></i>
+                <span>转账</span>
+            </button>
+            <button class="function-btn" id="btnExchange">
+                <i class="fas fa-sync-alt"></i>
+                <span>兑换</span>
+            </button>
+            <button class="function-btn" id="btnRecords">
+                <i class="fas fa-list-alt"></i>
+                <span>记录</span>
+            </button>
+            <button class="function-btn" id="btnTeam">
+                <i class="fas fa-users"></i>
+                <span>团队</span>
+            </button>
+            <button class="function-btn" id="btnHelp">
+                <i class="fas fa-question-circle"></i>
+                <span>帮助</span>
+            </button>
+            <button class="function-btn" id="btnProfile">
+                <i class="fas fa-user"></i>
+                <span>我的</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 转账弹窗 -->
+    <div class="modal" id="transferModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>红包转账</h3>
+                <button class="modal-close" id="closeTransferModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>接收方手机号</label>
+                    <input type="text" class="form-input" id="transferToId" placeholder="请输入接收方手机号">
+                </div>
+                <div class="form-group">
+                    <label>转账金额</label>
+                    <input type="number" class="form-input" id="transferAmount" placeholder="请输入转账金额（整百）">
+                </div>
+                <div class="form-group">
+                    <label>交易密码</label>
+                    <input type="password" class="form-input" id="transferTradePassword" placeholder="请输入交易密码">
+                </div>
+                <div class="transfer-info">
+                    <p>转账规则：整百转账</p>
+                    <p>转出方获得50%积分奖励</p>
+                    <p>接收方获得90%红包 + 10%积分</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelTransfer">取消</button>
+                <button class="btn btn-primary" id="confirmTransfer">确认转账</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 兑换弹窗 -->
+    <div class="modal" id="exchangeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>红包兑换积分</h3>
+                <button class="modal-close" id="closeExchangeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>兑换金额</label>
+                    <input type="number" class="form-input" id="exchangeAmount" placeholder="请输入兑换金额">
+                </div>
+
+                <div class="exchange-info">
+                    <p>兑换比例：1红包 = 5积分</p>
+                    <p>最低兑换：100红包起</p>
+                    <p>可获得积分：<span id="exchangeResult">0</span></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelExchange">取消</button>
+                <button class="btn btn-primary" id="confirmExchange">确认兑换</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 记录弹窗 -->
+    <div class="modal" id="recordsModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>资产操作记录</h3>
+                <button class="modal-close" id="closeRecordsModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="table-container">
+                    <table class="records-table">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>类型</th>
+                                <th>红包</th>
+                                <th>积分</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordsList">
+                            <!-- 动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeRecordsBtn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 团队弹窗 -->
+    <div class="modal" id="teamModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>我的团队</h3>
+                <button class="modal-close" id="closeTeamModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="team-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="teamCount">0</div>
+                        <div class="stat-label">团队成员</div>
+                    </div>
+                </div>
+                <div class="invite-code">
+                    <label>我的邀请码</label>
+                    <div class="code-display">
+                        <span id="myInviteCode">-</span>
+                        <button class="btn-copy" id="copyInviteCode">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="team-list" id="teamList">
+                    <!-- 动态加载 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 帮助弹窗 -->
+    <div class="modal" id="helpModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>帮助中心：功能说明</h3>
+                <button class="modal-close" id="closeHelpModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <ul class="help-list">
+                    <li><strong>积分释放</strong>：每日凌晨自动释放积分的千分之二到红包</li>
+                    <li><strong>加速释放</strong>：下级用红包兑换积分，上级可加速红包释放</li>
+                    <li><strong>转账规则</strong>：整百转账，转出方减少对应红包，获得50%积分；接收方获得90%红包10%积分</li>
+                    <li><strong>兑换规则</strong>：100红包可兑换500积分（最低100红包起兑）</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeHelpBtn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 个人中心弹窗 -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>个人中心</h3>
+                <button class="modal-close" id="closeProfileModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-info">
+                    <div class="info-item">
+                        <label>手机号</label>
+                        <span id="profileUserId">-</span>
+                    </div>
+                    <div class="info-item">
+                        <label>红包余额</label>
+                        <span id="profileYellowFish">0.00</span>
+                    </div>
+                    <div class="info-item">
+                        <label>积分余额</label>
+                        <span id="profileLockedBait">0.00</span>
+                    </div>
+                    <div class="info-item">
+                        <label>待领取加速</label>
+                        <span id="profilePendingAccelerate">0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改密码弹窗 -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>修改密码</h3>
+                <button class="modal-close" id="closeChangePasswordModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>当前登录密码</label>
+                    <input type="password" class="form-input" id="currentLoginPwd" placeholder="请输入当前登录密码">
+                </div>
+                <div class="form-group">
+                    <label>新登录密码</label>
+                    <input type="password" class="form-input" id="newLoginPwd" placeholder="请输入新登录密码（至少6位）">
+                </div>
+                <div class="form-group">
+                    <label>当前交易密码</label>
+                    <input type="password" class="form-input" id="currentTradePwd" placeholder="请输入当前交易密码">
+                </div>
+                <div class="form-group">
+                    <label>新交易密码</label>
+                    <input type="password" class="form-input" id="newTradePwd" placeholder="请输入新交易密码（至少6位）">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelChangePassword">取消</button>
+                <button class="btn btn-primary" id="confirmChangePassword">确认修改</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 公告弹窗 -->
+    <div class="modal" id="announcementModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>系统公告</h3>
+                <button class="modal-close" id="closeAnnouncementModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="announcementList">
+                    <!-- 动态加载 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeAnnouncementBtn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 释放红包弹窗 -->
+    <div class="release-popup" id="releasePopup">
+        <div class="popup-content">
+            <div class="red-envelope">
+                <div class="envelope-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="popup-text">
+                    <p>今日可领取</p>
+                    <div class="amount-display">
+                        <span class="amount-placeholder" id="releaseAmountPlaceholder">???</span>
+                        <span class="amount-value" id="releaseAmount" style="display: none;">0.00</span>
+                    </div>
+                    <p class="amount-unit">红包</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js?v=2"></script>
+    <script src="js/app.js?v=2"></script>
+    <script>
+        // API 基础地址
+        var API_BASE_URL = window.location.origin + '/api';
+        
+        // 显示提示
+        function showToast(message) {
+            var toast = document.getElementById('toastMessage');
+            toast.textContent = message;
+            toast.classList.add('active');
+            setTimeout(function() {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+        
+        // 登录请求
+        async function doLogin(userId, password) {
+            try {
+                var response = await fetch(API_BASE_URL + '/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userId, password: password })
+                });
+                var data = await response.json();
+                return data;
+            } catch (error) {
+                throw error;
+            }
+        }
+        
+        // 显示会员中心
+        function showMemberCenter(user) {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('memberContainer').style.display = 'block';
+            
+            // 更新用户信息
+            document.getElementById('yellowFishCount').textContent = user.yellowFish || '0.00';
+            document.getElementById('lockedBaitCount').textContent = user.lockedBait || '0.00';
+            document.getElementById('pendingAccelerate').textContent = user.pendingAccelerateAmount || '0.00';
+            document.getElementById('userIdDisplay').textContent = user.userId;
+            document.getElementById('inviteCodeDisplay').textContent = user.inviteCode || '无';
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM加载完成');
+            
+            // 登录按钮
+            var btn = document.getElementById('btnLogin');
+            if (btn) {
+                btn.onclick = async function() {
+                    var userId = document.getElementById('loginUserId').value.trim();
+                    var password = document.getElementById('loginPassword').value.trim();
+                    
+                    if (!userId || !password) {
+                        showToast('请填写完整信息');
+                        return false;
+                    }
+                    
+                    btn.textContent = '登录中...';
+                    btn.disabled = true;
+                    
+                    try {
+                        var result = await doLogin(userId, password);
+                        if (result.success) {
+                            // 保存登录信息
+                            localStorage.setItem('authToken', result.data.token);
+                            localStorage.setItem('userInfo', JSON.stringify(result.data.user));
+                            showToast('登录成功');
+                            // 显示会员中心
+                            showMemberCenter(result.data.user);
+                        } else {
+                            showToast(result.message || '登录失败');
+                        }
+                    } catch (error) {
+                        console.error('登录错误:', error);
+                        showToast('网络错误，请检查连接');
+                    } finally {
+                        btn.textContent = '登 录';
+                        btn.disabled = false;
+                    }
+                };
+            }
+            
+            // 注册链接
+            var toReg = document.getElementById('toRegister');
+            if (toReg) {
+                toReg.onclick = function(e) {
+                    e.preventDefault();
+                    document.getElementById('loginForm').style.display = 'none';
+                    document.getElementById('registerForm').style.display = 'block';
+                };
+            }
+            
+            // 返回登录
+            var toLogin = document.getElementById('toLogin');
+            if (toLogin) {
+                toLogin.onclick = function(e) {
+                    e.preventDefault();
+                    document.getElementById('registerForm').style.display = 'none';
+                    document.getElementById('loginForm').style.display = 'block';
+                };
+            }
+            
+            // 检查是否已登录
+            var token = localStorage.getItem('authToken');
+            var userInfo = localStorage.getItem('userInfo');
+            if (token && userInfo) {
+                showMemberCenter(JSON.parse(userInfo));
+            }
+        });
+    </script>
+</body>
+</html>
